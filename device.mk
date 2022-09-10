@@ -49,5 +49,4 @@ PRODUCT_COPY_FILES += $(FILTERED_RECOVERY_FILES) \
 
 # Properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.build.security_patch=2099-12-31 \
     ro.treble.enabled=true
