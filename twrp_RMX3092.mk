@@ -27,6 +27,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 # Inherit from our custom product configuration
 $(call inherit-product, vendor/twrp/config/common.mk)
 
+# Inherit any OrangeFox-specific settings
+$(call inherit-product-if-exists, $(DEVICE_PATH)/fox_RMX3092.mk)
+
 # Inherit device configuration
 $(call inherit-product, $(DEVICE_PATH)/device.mk)
 
@@ -35,3 +38,4 @@ PRODUCT_NAME := twrp_$(PRODUCT_RELEASE_NAME)
 PRODUCT_BRAND := Realme
 PRODUCT_MODEL := Realme X7 5G
 PRODUCT_MANUFACTURER := Realme
+
