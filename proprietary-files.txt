@@ -1,0 +1,5 @@
+# Libraries
+vendor/lib64/hw/gatekeeper.mt6853.so
+vendor/lib64/libMcClient.so
+vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so
+vendor/lib64/hw/libSoftGatekeeper.so

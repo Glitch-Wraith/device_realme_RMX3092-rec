@@ -25,12 +25,27 @@ PRODUCT_SHIPPING_API_LEVEL := 29
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 PRODUCT_PACKAGES += \
-   android.hardware.fastboot@1.0-impl-mock \
+    android.hardware.gatekeeper@1.0-impl \
+    gatekeeper.mt6853 \
+    libSoftGatekeeper \
+    libMcClient \
+    android.hardware.fastboot@1.0-impl-mock \
     android.hardware.fastboot@1.0-impl-mock.recovery
 
 # Prebuilts
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root) \
-	$(LOCAL_PATH)/prebuilt/dtb:dtb.img
+EXCLUDE_ELF_FILES := \
+    recovery/root/vendor/lib64/hw/gatekeeper.mt6853.so \
+    recovery/root/vendor/lib64/libMcClient.so \
+    recovery/root/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so \
+    recovery/root/vendor/lib64/hw/libSoftGatekeeper.so
+
+ALL_RECOVERY_FILES := $(call find-copy-subdir-files, *, $(LOCAL_PATH)/recovery/root, recovery/root)
+
+FILTERED_RECOVERY_FILES := $(foreach f,$(ALL_RECOVERY_FILES),\
+    $(if $(filter $(lastword $(subst :, ,$(f))),$(EXCLUDE_ELF_FILES)),,$(f)))
+
+PRODUCT_COPY_FILES += $(FILTERED_RECOVERY_FILES) \
+    $(LOCAL_PATH)/prebuilt/dtb:dtb.img
 
 # Properties
 PRODUCT_PROPERTY_OVERRIDES += \
