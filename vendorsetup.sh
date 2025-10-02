@@ -54,9 +54,7 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
     export FOX_RECOVERY_SYSTEM_PARTITION="/dev/block/mapper/system"
     export FOX_RECOVERY_VENDOR_PARTITION="/dev/block/mapper/vendor"
     export FOX_BUGGED_AOSP_ARB_WORKAROUND="1546300800"  # 2019-01-01
-
-    # R11.1 Settings
-    export FOX_VERSION="R11.1_7"
+    export FOX_MAINTAINER_PATCH_VERSION=1
     export OF_MAINTAINER="Pranshu Sheoran"
 
     export TARGET_OTA_ASSERT_DEVICE="RMX3092,RMX3092L1,RMX3092PU,rmx3092"
