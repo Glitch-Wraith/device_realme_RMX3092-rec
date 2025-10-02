@@ -18,32 +18,20 @@
 
 # Release name
 PRODUCT_RELEASE_NAME := RMX3092
-
-# Dynamic
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
+DEVICE_PATH := device/realme/$(PRODUCT_RELEASE_NAME)
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 
 # Inherit from our custom product configuration
-$(call inherit-product, vendor/pb/config/common.mk)
+$(call inherit-product, vendor/twrp/config/common.mk)
 
-PRODUCT_DEVICE := RMX3092
-PRODUCT_NAME := omni_RMX3092
+# Inherit device configuration
+$(call inherit-product, $(DEVICE_PATH)/device.mk)
+
+PRODUCT_DEVICE := $(PRODUCT_RELEASE_NAME)
+PRODUCT_NAME := twrp_$(PRODUCT_RELEASE_NAME)
 PRODUCT_BRAND := Realme
-PRODUCT_MODEL := Realme X7/7 5G/Narzo 30 Pro
+PRODUCT_MODEL := Realme X7 5G
 PRODUCT_MANUFACTURER := Realme
-
-# HACK: Set vendor patch level and enable Treble
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.build.security_patch=2099-12-31 \
-    ro.treble.enabled=true
-
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root) \
-	$(LOCAL_PATH)/prebuilt/dtb:dtb.img
-
-PRODUCT_PACKAGES += \
-    android.hardware.fastboot@1.0-impl-mock \
-    android.hardware.fastboot@1.0-impl-mock.recovery
-

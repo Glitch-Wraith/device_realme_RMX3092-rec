@@ -16,8 +16,6 @@
 # limitations under the License.
 #
 
-DEVICE_PATH := device/realme/RMX3092
-
 # For building with minimal manifest
 ALLOW_MISSING_DEPENDENCIES := true
 
@@ -107,6 +105,9 @@ BOARD_SUPPRESS_SECURE_ERASE := true
 BOARD_HAS_LARGE_FILESYSTEM := true
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
+# Properties
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+
 # Crypto
 PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := 2099-12-31
@@ -126,6 +127,7 @@ TW_USE_TOOLBOX := true
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_MAX_BRIGHTNESS := 2047
 TW_DEFAULT_BRIGHTNESS := 1200
+TW_FRAMERATE := 60
 TW_Y_OFFSET := 115
 TW_H_OFFSET := -115
 TWRP_INCLUDE_LOGCAT := true

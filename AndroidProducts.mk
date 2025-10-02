@@ -17,6 +17,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-     $(LOCAL_DIR)/omni_RMX3092.mk
+     $(LOCAL_DIR)/twrp_RMX3092.mk
 
-COMMON_LUNCH_CHOICES := omni_RMX3092-eng
+COMMON_LUNCH_CHOICES := \
+    twrp_RMX3092-user \
+    twrp_RMX3092-userdebug \
+    twrp_RMX3092-eng
