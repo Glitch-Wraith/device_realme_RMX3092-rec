@@ -8,35 +8,6 @@ package {
 }
 
 cc_prebuilt_library_shared {
-    name: "android.hardware.gatekeeper@1.0-impl",
-    owner: "realme",
-    strip: {
-        none: true,
-    },
-    target: {
-        android_arm64: {
-            srcs: ["recovery/root/vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so"],
-            shared_libs: [
-                "android.hardware.gatekeeper@1.0",
-                "libhardware",
-                "libhidlbase",
-                "libutils",
-                "liblog",
-                "libc++",
-                "libc",
-                "libm",
-                "libdl",
-            ],
-        },
-    },
-    compile_multilib: "64",
-    relative_install_path: "hw",
-    prefer: true,
-    soc_specific: true,
-    recovery_available: true,
-}
-
-cc_prebuilt_library_shared {
     name: "gatekeeper.mt6853",
     owner: "realme",
     strip: {

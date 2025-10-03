@@ -146,7 +146,7 @@ TW_NO_SCREEN_BLANK := true
 TW_SKIP_COMPATIBILITY_CHECK := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_INCLUDE_PYTHON := true
-TW_OZIP_DECRYPT_KEY := "0000"
+TW_OZIP_DECRYPT_KEY := 0000
 TW_INCLUDE_LOGICAL := oppo_product oppo_engineering common_preload
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/etc/recovery.fstab
 

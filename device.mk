@@ -25,7 +25,7 @@ PRODUCT_SHIPPING_API_LEVEL := 29
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-impl:64 \
+    android.hardware.gatekeeper@1.0-impl \
     gatekeeper.mt6853:64 \
     libSoftGatekeeper:64 \
     libMcClient:64 \
