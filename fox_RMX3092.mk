@@ -29,8 +29,6 @@ OF_QUICK_BACKUP_LIST := /boot;/data;
 
 # OTA
 OF_KEEP_DM_VERITY := 1
-OF_SUPPORT_ALL_BLOCK_OTA_UPDATES := 1
-OF_FIX_OTA_UPDATE_MANUAL_FLASH_ERROR := 1
 
 # try to prevent potential data format errors
 OF_UNBIND_SDCARD_F2FS := 1
