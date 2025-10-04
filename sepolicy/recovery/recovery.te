@@ -1,0 +1,4 @@
+type vendor_block_device, dev_type;
+allow recovery vendor_block_device:blk_file { ioctl read write create getattr setattr lock relabelfrom relabelto append unlink link rename open };
+
+allow recovery vendor_file:dir mounton;
