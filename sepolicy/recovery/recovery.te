@@ -1,0 +1,16 @@
+# Allow recovery to mount on vendor directory
+allow recovery vendor_file:dir { mounton search read open getattr };
+allow recovery vendor_file:filesystem { mount unmount remount };
+allow recovery vendor_file:file { read open getattr };
+allow recovery vendor_file:lnk_file { read getattr };
+
+# Allow recovery to access device-mapper devices
+allow recovery dm_device:chr_file { read write open ioctl getattr };
+allow recovery dm_device:blk_file { read write open ioctl getattr lock };
+
+# Allow recovery to work with block device directory
+allow recovery block_device:dir { search read open getattr };
+allow recovery block_device:lnk_file { read getattr };
+
+# Allow mounting ext4 filesystems
+allow recovery labeledfs:filesystem { mount unmount };
