@@ -1,0 +1,2 @@
+type vendor_block_device, dev_type;
+allow recovery vendor_block_device:blk_file { read write open getattr };
