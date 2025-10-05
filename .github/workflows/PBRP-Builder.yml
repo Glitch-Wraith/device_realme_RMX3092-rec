@@ -1,0 +1,151 @@
+name: PitchBlack Recovery - Build
+
+# Credits to:
+# https://github.com/TeamWin
+# https://gitlab.com/OrangeFox
+# https://github.com/PitchBlackRecoveryProject
+# https://github.com/carlodandan for Recovery Builder Template
+# And all Contributors
+
+on:
+  workflow_dispatch:
+    inputs:
+      MANIFEST_BRANCH:
+        description: 'PBRP Manifest Branch'
+        required: true
+        default: 'android-12.1'
+        type: choice
+        options:
+        - android-14.0
+        - android-12.1
+        - android-11.0
+        - android-10.0
+        - android-9.0
+        - other
+      MANIFEST_BRANCH_CUSTOM:
+        description: 'Custom Branch Name (only if "other" is selected above)'
+        required: false
+        default: ''
+      DEVICE_TREE:
+        description: 'PBRP Device Tree'
+        required: true
+        default: 'https://github.com/Glitch-Wraith/device_realme_RMX3092-rec.git'
+      DEVICE_TREE_BRANCH:
+        description: 'PBRP Device Tree Branch'
+        required: true
+        default: 'pbrp-12.1'
+      DEVICE_PATH:
+        description: 'Specify your Device Path'
+        required: true
+        default: 'device/realme/RMX3092'
+      DEVICE_NAME:
+        description: 'Specify your Device Codename'
+        required: true
+        default: 'RMX3092'
+      BUILD_TARGET:
+        description: 'Specify your Build Target'
+        required: true
+        default: 'pbrp'
+        type: choice
+        options:
+        - pbrp
+        - recoveryimage
+        - bootimage
+        - vendorbootimage
+
+jobs:
+  build:
+    name: Build PBRP by ${{ github.actor }}
+    runs-on: ubuntu-22.04
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+              
+    - name: Clean-up
+      uses: rokibhasansagar/slimhub_actions@main
+
+    - name: Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 24
+      
+    - name: Build Environment
+      run: |
+        sudo apt install aria2 -y
+        git clone https://gitlab.com/OrangeFox/misc/scripts.git -b master
+        cd scripts
+        sudo bash setup/android_build_env.sh
+        sudo apt install repo -y
+      
+    - name: Set-up Manifest
+      run: |
+        mkdir -p ${GITHUB_WORKSPACE}/PBRP
+        cd ${GITHUB_WORKSPACE}/PBRP
+        git config --global user.name "${{ github.actor }}"
+        git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+        
+        # Determine which branch to use
+        if [ "${{ inputs.MANIFEST_BRANCH }}" == "other" ]; then
+          BRANCH="${{ inputs.MANIFEST_BRANCH_CUSTOM }}"
+        else
+          BRANCH="${{ inputs.MANIFEST_BRANCH }}"
+        fi
+        echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
+        
+        # Initialize and sync PBRP manifest
+        repo init --depth=1 -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b ${BRANCH}
+        repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j$(nproc --all)
+
+    - name: Clone Device Tree
+      run: |
+        cd ${GITHUB_WORKSPACE}/PBRP
+        git clone ${{ inputs.DEVICE_TREE }} -b ${{ inputs.DEVICE_TREE_BRANCH }} ./${{ inputs.DEVICE_PATH }}
+        cd ${{ inputs.DEVICE_PATH }}
+        echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+    - name: Determine Lunch Prefix
+      run: |
+        if [ "${{ env.BRANCH }}" == "android-14.0" ] || [ "${{ env.BRANCH }}" == "android-12.1" ]; then
+          echo "LUNCH_PREFIX=pb" >> $GITHUB_ENV
+        else
+          echo "LUNCH_PREFIX=omni" >> $GITHUB_ENV
+        fi
+
+    - name: Building PitchBlack Recovery
+      run: |
+        cd ${GITHUB_WORKSPACE}/PBRP
+        set +e
+        source build/envsetup.sh
+        export ALLOW_MISSING_DEPENDENCIES=true
+        set -e
+        lunch ${{ env.LUNCH_PREFIX }}_${{ inputs.DEVICE_NAME }}-eng && mka ${{ inputs.BUILD_TARGET }}
+
+    - name: Set Release Properties
+      run: |
+        echo "BUILD_DATE=$(TZ=Asia/Manila date +%Y%m%d)" >> $GITHUB_ENV
+        cd ${GITHUB_WORKSPACE}/PBRP
+
+        DEVICE_TREE_URL="${{ inputs.DEVICE_TREE }}"
+        if [[ "${DEVICE_TREE_URL}" == *.git ]]; then
+          DEVICE_TREE_URL="${DEVICE_TREE_URL%.git}"
+        fi
+        echo "DEVICE_TREE_URL=${DEVICE_TREE_URL}" >> $GITHUB_ENV
+
+    - name: Upload to Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          PBRP/out/target/product/${{ inputs.DEVICE_NAME }}/*.img
+          PBRP/out/target/product/${{ inputs.DEVICE_NAME }}/*.zip
+        name: PitchBlack Recovery for ${{ inputs.DEVICE_NAME }} // ${{ env.BUILD_DATE }}
+        tag_name: ${{ github.run_id }}
+        body: |
+          ## PitchBlack Recovery Build - Unofficial
+          Build: ${{ env.BRANCH }}
+          Device: [Device Tree/Branch](${{ env.DEVICE_TREE_URL }}/tree/${{ inputs.DEVICE_TREE_BRANCH }})
+          Commit: Most recent [commit](${{ env.DEVICE_TREE_URL }}/commit/${{ env.COMMIT_ID }}) during building.
+          Build Target: ${{ inputs.BUILD_TARGET }}
