@@ -17,9 +17,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-     $(LOCAL_DIR)/pb_RMX3092.mk
+     $(LOCAL_DIR)/omni_RMX3092.mk
 
 COMMON_LUNCH_CHOICES := \
-    pb_RMX3092-user \
-    pb_RMX3092-userdebug \
-    pb_RMX3092-eng
+    omni_RMX3092-user \
+    omni_RMX3092-userdebug \
+    omni_RMX3092-eng
