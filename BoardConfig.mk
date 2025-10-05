@@ -88,7 +88,7 @@ BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flag 2
 BOARD_SUPER_PARTITION_SIZE := 8136949760
 BOARD_SUPER_PARTITION_GROUPS := main
 BOARD_MAIN_SIZE := 8136949760
-BOARD_MAIN_PARTITION_LIST := product vendor system
+BOARD_MAIN_PARTITION_LIST := system vendor product oppo_product oppo_engineering
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072
@@ -153,7 +153,7 @@ TW_SKIP_COMPATIBILITY_CHECK := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_INCLUDE_PYTHON := true
 TW_OZIP_DECRYPT_KEY := "0000"
-TW_INCLUDE_LOGICAL := oppo_product oppo_engineering common_preload
+TW_INCLUDE_LOGICAL := system vendor product oppo_product oppo_engineering
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/etc/recovery.fstab
 
 # PBRP specific build flags
