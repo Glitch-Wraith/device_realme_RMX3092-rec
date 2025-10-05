@@ -17,9 +17,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-     $(LOCAL_DIR)/twrp_RMX3092.mk
+     $(LOCAL_DIR)/pb_RMX3092.mk
 
 COMMON_LUNCH_CHOICES := \
-    twrp_RMX3092-user \
-    twrp_RMX3092-userdebug \
-    twrp_RMX3092-eng
+    pb_RMX3092-user \
+    pb_RMX3092-userdebug \
+    pb_RMX3092-eng
