@@ -1,7 +1,16 @@
 import /init.recovery.trustonic.rc
 
 on early-init 
-     start adbd
+    # Set SELinux to permissive mode FIRST
+    write /sys/fs/selinux/enforce 0
+    
+    # Wait for device-mapper devices to be ready
+    wait /dev/block/dm-0
+    wait /dev/block/dm-1
+    wait /dev/block/dm-2
+    wait /dev/block/dm-3
+    
+    start adbd
 
 on fs
     install_keyring
